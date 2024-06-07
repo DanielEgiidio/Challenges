@@ -1,11 +1,14 @@
+import { TbClipboardText } from "react-icons/tb";
 import { ITasks } from "../../App";
 import Task from "./task";
 
 interface Props {
   tasks: ITasks[];
+  onDelete: (taskId: string) => void;
+  onComplete: (taskId: string) => void;
 }
 
-export default function TaskHeader({ tasks }: Props) {
+export default function TaskHeader({ tasks, onDelete, onComplete }: Props) {
     const taskQuantity = tasks.length;
     const isCompleted = tasks.filter((task) => task.isCompleted).length;
 
@@ -27,8 +30,18 @@ export default function TaskHeader({ tasks }: Props) {
       </header>
       <div className="flex flex-col gap-3">
         {tasks.map((task) => (
-          <Task key={task.id} task={task} />
+          <Task key={task.id} task={task} onDelete={onDelete} onComplete={onComplete}/>
         ))}
+
+        {tasks.length <=  0 && (
+          <section className="mt-4 flex items-center justify-center flex-col gap-4 text-[--gray-300] text-center">
+            <TbClipboardText size={50} className="opacity-[0.3]"/>
+            <div>
+              <p className="font-bold">Você ainda não criou suas tarefas</p>
+              <span>Crie e organzie seu Todo List</span>
+            </div>
+          </section>
+        )}
       </div>
     </section>
   );
